@@ -49,10 +49,10 @@ func main() {
 	flag.Parse()
 
 	// set the right logging level
-	if *verbose == true {
-		log.SetLevel(log.InfoLevel)
-	} else if *debug == true {
+	if *debug == true {
 		log.SetLevel(log.DebugLevel)
+	} else if *verbose == true {
+		log.SetLevel(log.InfoLevel)
 	} else {
 		log.SetLevel(log.WarnLevel)
 	}
