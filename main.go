@@ -29,7 +29,7 @@ func init() {
 	log.SetLevel(log.InfoLevel)
 }
 
-func Handlers() *mux.Router {
+func handlers() *mux.Router {
 	r := mux.NewRouter()
 	r.HandleFunc("/db/graphite/series", HandleInflux).Methods("POST")
 	return r
@@ -81,10 +81,10 @@ func main() {
 	}
 
 	// Create a new global batch point handler
-	influxPointbatch, _ = client.NewBatchPoints(client.BatchPointsConfig{
-		Database:  *db,
-		Precision: "us",
-	})
+//	influxPointbatch, _ = client.NewBatchPoints(client.BatchPointsConfig{
+//		Database:  *db,
+//		Precision: "us",
+//	})
 
-	http.ListenAndServe(*addr, Handlers())
+	http.ListenAndServe(*addr, handlers())
 }

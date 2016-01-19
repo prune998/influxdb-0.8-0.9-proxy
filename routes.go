@@ -26,10 +26,17 @@ type influxMultiStruct []influxStruct
 // this is the main function to process an Influxdb 0.8 request
 func HandleInflux(w http.ResponseWriter, r *http.Request) {
 
+  // create a new batchPoint for each request as it is not thread safe
+  // https://github.com/influxdata/influxdb/blob/master/client/v2/client.go#L163-L165
+  influxPointbatch, _ = client.NewBatchPoints(client.BatchPointsConfig{
+    Database:  *db,
+    Precision: "us",
+  })
+
 	// instanciate an Influxdb data structure
 	t := influxMultiStruct{}
 
-	jsonDataFromHttp, err := ioutil.ReadAll(r.Body)
+	jsonDataFromHTTP, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
 		log.WithFields(log.Fields{
@@ -39,7 +46,7 @@ func HandleInflux(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = json.Unmarshal(jsonDataFromHttp, &t)
+	err = json.Unmarshal(jsonDataFromHTTP, &t)
 	if err != nil {
 		log.WithFields(log.Fields{
 			"error": err,
