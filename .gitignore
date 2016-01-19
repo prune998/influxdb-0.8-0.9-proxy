@@ -1,6 +1,7 @@
 # files
 *.[oa]
 *~
+influxdb-0.8-0.9-proxy
 
 # dirs
 pkg/
