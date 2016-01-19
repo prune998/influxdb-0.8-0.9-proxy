@@ -12,8 +12,9 @@ import (
 
 // define global vars
 var (
-	influx_user      string
-	influx_pass      string
+	influxUser      string
+	influxPass      string
+  influxDb        string
 	influxClient     client.Client
 	influxPointbatch client.BatchPoints
 )
@@ -48,6 +49,11 @@ func main() {
 	debug := flag.Bool("debug", false, "set debug ON")
 	flag.Parse()
 
+  // assign global vars
+	influxUser  = *user
+	influxPass  = *pass
+  influxDb    = *db
+
 	// set the right logging level
 	if *debug == true {
 		log.SetLevel(log.DebugLevel)
@@ -61,8 +67,6 @@ func main() {
 		"bind": addr,
 	}).Info("Influxdb 0.8 0.9 proxy started")
 
-	influx_user = *user
-	influx_pass = *pass
 
 	// connect to the destination influxdb 0.9 server
 	conf := client.HTTPConfig{

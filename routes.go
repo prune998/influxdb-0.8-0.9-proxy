@@ -29,7 +29,7 @@ func HandleInflux(w http.ResponseWriter, r *http.Request) {
   // create a new batchPoint for each request as it is not thread safe
   // https://github.com/influxdata/influxdb/blob/master/client/v2/client.go#L163-L165
   influxPointbatch, _ = client.NewBatchPoints(client.BatchPointsConfig{
-    Database:  *db,
+    Database:  influxDb,
     Precision: "us",
   })
 
@@ -75,9 +75,9 @@ func HandleInflux(w http.ResponseWriter, r *http.Request) {
 	// for the moment the login/pass to remote influx is fixed, but we should
 	// send the data with the incoming login/pass
 
-	if r.Form["u"][0] == influx_user && r.Form["p"][0] == influx_pass {
+	if r.Form["u"][0] == influxUser && r.Form["p"][0] == influxPass {
 		// parse the metrics and add to the queue
-		io.WriteString(w, "request accepted for user "+influx_user+"\n")
+		io.WriteString(w, "request accepted for user "+influxUser+"\n")
 	} else {
 		io.WriteString(w, "Username/Password missmatch\n")
 		log.WithFields(log.Fields{
