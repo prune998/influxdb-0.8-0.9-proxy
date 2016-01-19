@@ -30,6 +30,7 @@ func HandleInflux(w http.ResponseWriter, r *http.Request) {
 	t := influxMultiStruct{}
 
 	jsonDataFromHttp, err := ioutil.ReadAll(r.Body)
+	defer r.Body.Close()
 	if err != nil {
 		log.WithFields(log.Fields{
 			"error": err,
@@ -143,14 +144,14 @@ func HandleInflux(w http.ResponseWriter, r *http.Request) {
 
 			// create a new point
 			pt, _ := client.NewPoint(serieSplit[0], tags, fields, pointTime)
-			InfluxPointbatch.AddPoint(pt)
+			influxPointbatch.AddPoint(pt)
 			log.WithFields(log.Fields{
 				"metric": serieSplit[0],
 				"time":   pointTime,
 			}).Info("new Metric added")
 		}
 	}
-	err = InfluxClient.Write(InfluxPointbatch)
+	err = influxClient.Write(influxPointbatch)
 	if err != nil {
 		log.WithFields(log.Fields{
 			"error": err,
