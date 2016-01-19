@@ -14,8 +14,8 @@ import (
 var (
 	influx_user      string
 	influx_pass      string
-	InfluxClient     client.Client
-	InfluxPointbatch client.BatchPoints
+	influxClient     client.Client
+	influxPointbatch client.BatchPoints
 )
 
 func init() {
@@ -71,7 +71,7 @@ func main() {
 		Password: *pass,
 	}
 
-	InfluxClient, err = client.NewHTTPClient(conf)
+	influxClient, err = client.NewHTTPClient(conf)
 	if err != nil {
 		log.WithFields(log.Fields{
 			"address": *dest,
@@ -81,7 +81,7 @@ func main() {
 	}
 
 	// Create a new global batch point handler
-	InfluxPointbatch, _ = client.NewBatchPoints(client.BatchPointsConfig{
+	influxPointbatch, _ = client.NewBatchPoints(client.BatchPointsConfig{
 		Database:  *db,
 		Precision: "us",
 	})
